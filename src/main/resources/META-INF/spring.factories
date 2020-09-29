@@ -1,0 +1,2 @@
+io.pivotal.cfenv.spring.boot.CfEnvProcessor=\
+  mcsss.example.security.resourceserver.CfSingleSignOnResourceProcessor
