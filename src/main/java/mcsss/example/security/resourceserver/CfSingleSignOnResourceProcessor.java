@@ -29,13 +29,18 @@ public class CfSingleSignOnResourceProcessor implements CfEnvProcessor {
         var usingSpringSecurity = ClassUtils.isPresent("org.springframework.security.core.Authentication", classLoader);
         return usingSpringSecurity;
     }
+    boolean isSpringResourceServerPresent(){
+        ClassLoader classLoader = SpringSecurityDetector.class.getClassLoader();
+        return ClassUtils.isPresent("org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider", classLoader);
+    }
 
     @Override
     public void process(CfCredentials cfCredentials, Map<String, Object> properties) {
         String authDomain = cfCredentials.getString("auth_domain");
         String issuer = fromAuthDomain(authDomain);
-        properties.put("spring.security.oauth2.resourceserver.jwt.issuer-uri", issuer + "/oauth/token");
-
+        if(isSpringResourceServerPresent()) {
+            properties.put("spring.security.oauth2.resourceserver.jwt.issuer-uri", issuer + "/oauth/token");
+        }
     }
 
     @Override
